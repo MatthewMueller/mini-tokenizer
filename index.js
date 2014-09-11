@@ -27,10 +27,12 @@ function tokens(regex, rep) {
   return function(str) {
     var toks = [];
 
-    str.replace(regex, function() {
-      var args = slice.call(arguments);
-      var tok = rep(args);
-      tok && toks.push(tok);
+    str.split('\n').forEach(function(line, i) {
+      line.replace(regex, function() {
+        var args = slice.call(arguments);
+        var tok = rep(args);
+        if (tok) toks.push({ value: tok, line: i + 1 });
+      });
     });
 
     return toks;
